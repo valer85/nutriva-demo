@@ -496,9 +496,20 @@ document.body.appendChild(acPortal);
 
 function positionPortal(inputEl) {
   const rect = inputEl.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  const maxH = 220;
+  const flipUp = spaceBelow < maxH + 8 && spaceAbove > spaceBelow;
   acPortal.style.left = rect.left + 'px';
-  acPortal.style.top  = (rect.bottom + 4) + 'px';
   acPortal.style.width = rect.width + 'px';
+  acPortal.style.maxHeight = Math.min(maxH, flipUp ? spaceAbove - 8 : spaceBelow - 8) + 'px';
+  if (flipUp) {
+    acPortal.style.top = '';
+    acPortal.style.bottom = (window.innerHeight - rect.top + 4) + 'px';
+  } else {
+    acPortal.style.bottom = '';
+    acPortal.style.top = (rect.bottom + 4) + 'px';
+  }
 }
 
 function closePortal() {
